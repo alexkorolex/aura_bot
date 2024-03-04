@@ -1,0 +1,10 @@
+{
+    "button_1": {
+        "text": "Менеджер",
+        "url": "https://t.me/dr_maseratti"
+    },
+    "button_2": {
+        "text": "Сайт",
+        "url": "https://auramyscent.com"
+    }
+}

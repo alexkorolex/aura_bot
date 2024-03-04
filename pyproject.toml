@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "aura-bot"
+version = "0.1.0"
+description = ""
+authors = ["alexkorolex <101796552+alexkorolex@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiogram = "^3.4.1"
+sqlalchemy = "^2.0.28"
+pymysql = "^1.1.0"
+asyncmy = "^0.2.9"
+greenlet = "^3.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

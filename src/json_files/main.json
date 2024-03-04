@@ -1,0 +1,18 @@
+{
+    "button_1": {
+        "text": "Каталог",
+        "callback_data": "catalog"
+    },
+    "button_2": {
+        "text": "Конфигуратор",
+        "callback_data": "configurator"
+    },
+    "button_3": {
+        "text": "Контакты",
+        "callback_data": "contacts"
+    },
+    "button_4": {
+        "text": "Ссылка на сайт",
+        "url": "https://auramyscent.com"
+    }
+}
