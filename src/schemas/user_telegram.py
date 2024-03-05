@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 
 
 class UserTelegramSchema(BaseModel):
@@ -10,6 +10,6 @@ class UserTelegramSchema(BaseModel):
             A base class for creating Pydantic models.
     """
 
-    id: int
+    telegram_id: str
     username: Optional[str] = None
-    link: HttpUrl
+    link: str

@@ -4,6 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.setting.settings import settings
 from src.models.shared.base_model import BaseModelORM
 from src.models.users import UsersModelORM  # noqa # pylint: disable=unused-import
+from src.models.category import CategoryModelORM  # noqa # pylint: disable=unused-import
+from src.models.product import ProductModelORM  # noqa # pylint: disable=unused-import
 
 
 class Database:
