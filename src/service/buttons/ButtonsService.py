@@ -28,6 +28,11 @@ class ButtonService:
                 )
 
     def create_buttons(self) -> InlineKeyboardBuilder:
+        """Function to create buttons for bot format InlineKeyboardBuilder
+
+        Returns:
+            InlineKeyboardBuilder: Inline keyboard builder inherits all methods from generic builder
+        """
         if self._buttons is not None:
             buttons = self._buttons
         return buttons

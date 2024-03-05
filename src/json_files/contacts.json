@@ -6,5 +6,9 @@
     "button_2": {
         "text": "Сайт",
         "url": "https://auramyscent.com"
+    },
+    "button_3": {
+        "text": "Назад",
+        "callback_data": "main"
     }
 }
