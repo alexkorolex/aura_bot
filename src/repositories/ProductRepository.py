@@ -115,13 +115,14 @@ async def insert_product_data() -> None:
 #     return file
 
 
-def create_list_of_products() -> set:
+def create_list_of_products(file_path_json: str) -> set:
     file_set = set()
-    with open("src/json_files/products.json", "r", encoding="utf-8") as file:
+    with open(file_path_json, "r", encoding="utf-8") as file:
         json_file = json.load(file)
         for json_data in json_file:
             file_set.add(json_file[json_data])
     return file_set
 
 
-file_set = create_list_of_products()
+file_set_product = create_list_of_products("src/json_files/products.json")
+file_set_category = create_list_of_products("src/json_files/category.json")

@@ -4,7 +4,11 @@ from aiogram import Router, F
 from aiogram.types import CallbackQuery, Message
 from src.service.manager.BotManagerFacade import BotManagerFacade
 from src.repositories.CategoryRepository import CategoryRepositoryAlchemy
-from src.repositories.ProductRepository import ProductRepositoryAlchemy, file_set
+from src.repositories.ProductRepository import (
+    ProductRepositoryAlchemy,
+    file_set_product,
+    file_set_category,
+)
 
 callback_router = Router()
 
@@ -76,9 +80,12 @@ async def answer_catalog(message_user: CallbackQuery) -> Message | None:
     return None
 
 
-@callback_router.callback_query(F.data == "Parfume")
+@callback_router.callback_query(F.data.in_(file_set_category))
 async def answer_parfume(message_user: CallbackQuery) -> Message | None:
-    result = await ProductRepositoryAlchemy.find_element(1)
+    if message_user.data == "Parfume":
+        result = await ProductRepositoryAlchemy.find_element(1)
+    elif message_user.data == "Samples":
+        result = await ProductRepositoryAlchemy.find_element(2)
     if result is not None:
         message = await BotManagerFacade(
             message=message_user, data_sql=result, data_callback="catalog"
@@ -87,7 +94,7 @@ async def answer_parfume(message_user: CallbackQuery) -> Message | None:
     return None
 
 
-@callback_router.callback_query(F.data.in_(file_set))
+@callback_router.callback_query(F.data.in_(file_set_product))
 async def answer_product(message_user: CallbackQuery) -> Message | None:
     print(message_user)
     return None
