@@ -3,6 +3,8 @@
 from aiogram import Router, F
 from aiogram.types import CallbackQuery, Message
 from src.service.manager.BotManagerFacade import BotManagerFacade
+from src.repositories.CategoryRepository import CategoryRepositoryAlchemy
+from src.repositories.ProductRepository import ProductRepositoryAlchemy, file_set
 
 callback_router = Router()
 
@@ -50,7 +52,7 @@ async def answer_configurator(message_user: CallbackQuery) -> Message:
 
 
 @callback_router.callback_query(F.data == "catalog")
-async def answer_catalog(message_user: CallbackQuery) -> Message:
+async def answer_catalog(message_user: CallbackQuery) -> Message | None:
     """Function to answer of CallbackQuery catalog
 
     Args:
@@ -65,8 +67,30 @@ async def answer_catalog(message_user: CallbackQuery) -> Message:
         https://core.telegram.org/bots/api#message
     """
     if isinstance(message_user.message, Message):
-        msg = await message_user.message.answer("Это товары")
-    return msg
+        result = await CategoryRepositoryAlchemy().find_element()
+        if result is not None:
+            message = await BotManagerFacade(
+                message=message_user, data_sql=result, data_callback="main"
+            ).delete_and_send_message("Это каталог товаров")
+            return message
+    return None
+
+
+@callback_router.callback_query(F.data == "Parfume")
+async def answer_parfume(message_user: CallbackQuery) -> Message | None:
+    result = await ProductRepositoryAlchemy.find_element(1)
+    if result is not None:
+        message = await BotManagerFacade(
+            message=message_user, data_sql=result, data_callback="catalog"
+        ).delete_and_send_message("Это каталог товаров")
+        return message
+    return None
+
+
+@callback_router.callback_query(F.data.in_(file_set))
+async def answer_product(message_user: CallbackQuery) -> Message | None:
+    print(message_user)
+    return None
 
 
 @callback_router.callback_query(F.data == "main")

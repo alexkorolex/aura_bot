@@ -13,7 +13,7 @@ class Settings:
     _MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
     _HOST = os.getenv("HOST")
     _PORT = os.getenv("PORT")
-    _DATABASE_URL_ASYNC = f"mysql+asyncmy://{_MYSQL_USER}:{_MYSQL_PASSWORD}@{_HOST}:{_PORT}/{_MYSQL_DATABASE}"
+    _DATABASE_URL_ASYNC = f"mysql+asyncmy://{_MYSQL_USER}:{_MYSQL_PASSWORD}@{_HOST}:{_PORT}/{_MYSQL_DATABASE}?charset=utf8"
 
 
 settings = Settings()

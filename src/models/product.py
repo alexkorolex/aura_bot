@@ -1,7 +1,7 @@
 """Product model ORM"""
 
 from enum import Enum
-from sqlalchemy import String
+from sqlalchemy import String, Column, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.models.shared.fields import integer_primary_key
 from src.models.category import CategoryModelORM
@@ -53,3 +53,4 @@ class ProductModelORM(BaseModelORM):
     category: Mapped[CategoryModelORM] = relationship(
         "CategoryModelORM", back_populates="products"
     )
+    category_id = Column(Integer, ForeignKey("category.id"))

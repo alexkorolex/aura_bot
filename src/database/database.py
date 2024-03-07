@@ -27,8 +27,7 @@ class Database:
         if cls._instance is None:
             cls._instance = super(Database, cls).__new__(cls)
             cls._instance.engine = create_async_engine(
-                url=settings._DATABASE_URL_ASYNC,
-                echo=True,
+                url=settings._DATABASE_URL_ASYNC, echo=True
             )
             cls._instance.session = async_sessionmaker(
                 bind=cls._instance.engine,

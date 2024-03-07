@@ -11,21 +11,33 @@ class ButtonService:
 
     _buttons = None
 
-    def __init__(self, buttons: dict):
+    def __init__(self, buttons_dict: dict = None, buttons_tuple: tuple = None, data_callback: str = None):  # type: ignore
         self._buttons = InlineKeyboardBuilder()
-        for button in buttons:
-            massive = buttons[button]
-            keys = list(massive.keys())
-            if keys[1] == "url":
-                self._buttons.row(
-                    InlineKeyboardButton(text=massive["text"], url=massive["url"])
-                )
-            elif keys[1] == "callback_data":
+        if buttons_dict is not None:
+            for button in buttons_dict:
+                massive = buttons_dict[button]
+                keys = list(massive.keys())
+                if keys[1] == "url":
+                    self._buttons.row(
+                        InlineKeyboardButton(text=massive["text"], url=massive["url"])
+                    )
+                elif keys[1] == "callback_data":
+                    self._buttons.row(
+                        InlineKeyboardButton(
+                            text=massive["text"], callback_data=massive["callback_data"]
+                        )
+                    )
+        if buttons_tuple is not None and data_callback is not None:
+            for button in buttons_tuple:
+                data_button = button._mapping._data[0]
                 self._buttons.row(
                     InlineKeyboardButton(
-                        text=massive["text"], callback_data=massive["callback_data"]
+                        text=data_button.name, callback_data=data_button.name
                     )
                 )
+            self._buttons.row(
+                InlineKeyboardButton(text="Назад", callback_data=data_callback)
+            )
 
     def create_buttons(self) -> InlineKeyboardBuilder:
         """Function to create buttons for bot format InlineKeyboardBuilder
