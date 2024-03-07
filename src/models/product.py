@@ -31,7 +31,7 @@ class ProductModelORM(BaseModelORM):
     application: Mapped[str_512] = mapped_column(
         String(512)
     )  # application (применение) of the product
-    sex: Mapped[Sex]  # gender-specific
+    sex: Mapped[str] = mapped_column(String(32))  # gender-specific
     volume: Mapped[int]  # volume of the product
     flavor_group: Mapped[str_32] = mapped_column(
         String(32), nullable=True

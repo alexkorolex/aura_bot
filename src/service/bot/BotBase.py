@@ -2,6 +2,7 @@
 
 from typing import Optional
 from aiogram.types import Message, CallbackQuery
+from aiogram.enums import ParseMode
 from aiogram.methods import DeleteMessage
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
@@ -49,5 +50,7 @@ class BotBase:
         Source:
             https://core.telegram.org/bots/api#message
         """
-        message = await self.message.answer(text, reply_markup=buttons.as_markup())
+        message = await self.message.answer(
+            text, reply_markup=buttons.as_markup(), parse_mode=ParseMode.HTML
+        )
         return message

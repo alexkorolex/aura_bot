@@ -1,5 +1,7 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder, KeyboardBuilder
 from aiogram.types import InlineKeyboardButton
+from src.models.product import ProductModelORM
+from src.models.category import CategoryModelORM
 
 
 class ButtonService:
@@ -11,7 +13,7 @@ class ButtonService:
 
     _buttons = None
 
-    def __init__(self, buttons_dict: dict = None, buttons_tuple: tuple = None, data_callback: str = None):  # type: ignore
+    def __init__(self, buttons_dict: dict = None, buttons_tuple: tuple = None, data_callback: str = None, iter_data=False):  # type: ignore
         self._buttons = InlineKeyboardBuilder()
         if buttons_dict is not None:
             for button in buttons_dict:
@@ -28,13 +30,23 @@ class ButtonService:
                         )
                     )
         if buttons_tuple is not None and data_callback is not None:
-            for button in buttons_tuple:
-                data_button = button._mapping._data[0]
-                self._buttons.row(
-                    InlineKeyboardButton(
-                        text=data_button.name, callback_data=data_button.name
-                    )
-                )
+            if iter_data is not False:
+                for button in buttons_tuple:
+                    data_button = button._mapping._data[0]
+                    if isinstance(data_button, CategoryModelORM):
+                        self._buttons.row(
+                            InlineKeyboardButton(
+                                text=data_button.name, callback_data=data_button.name  # type: ignore
+                            )
+                        )
+                    if isinstance(data_button, ProductModelORM):
+                        self._buttons.row(
+                            InlineKeyboardButton(
+                                text=data_button.name,
+                                callback_data=f"{data_button.name}_{data_button.category.name}",
+                            )
+                        )
+
             self._buttons.row(
                 InlineKeyboardButton(text="Назад", callback_data=data_callback)
             )

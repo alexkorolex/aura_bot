@@ -4,6 +4,7 @@ import logging
 import json
 from typing import Sequence, Tuple, Union
 from sqlalchemy import select, Row
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from src.models.product import ProductModelORM
@@ -35,10 +36,11 @@ class ProductRepositoryAlchemy:
                     await cls.__close(session)
 
     @classmethod
-    async def find_element(
+    async def find_elements(
         cls,
         category_id: Union[int, None] = None,
-    ) -> None | Sequence[Row[Tuple[ProductModelORM]]]:
+        find_one_element: bool = False,
+    ) -> None | Sequence[Row[Tuple[ProductModelORM]]] | ProductModelORM:
         """Function to find the user
 
         Args:
@@ -51,13 +53,18 @@ class ProductRepositoryAlchemy:
         async with cls._database.session() as session:  # type: ignore
             try:
                 if category_id is not None:
-                    query = select(ProductModelORM).where(
-                        ProductModelORM.category_id == category_id
+                    query = (
+                        select(ProductModelORM)
+                        .where(ProductModelORM.category_id == category_id)
+                        .options(selectinload(ProductModelORM.category))
                     )
                 else:
                     query = select(ProductModelORM)
                 result = await session.execute(query)
-                result = result.all()  # type: ignore
+                if find_one_element is False:
+                    result = result.all()  # type: ignore
+                else:
+                    result = result.scalar_one_or_none()
                 if result:
                     return result
             except NoResultFound as e:
@@ -74,15 +81,15 @@ async def insert_product_data() -> None:
             id=None,
             name="Black Mama",
             price=6990,
-            description="Описание BM",
-            composition="Состав BM",
-            application="Применение",
-            sex="man",
+            description="Black mama - унисекс аромат.\n\nЖенщина за 30 в черном платье пребывает вечером в дорогом ресторане Москвы. В воздухе царит запах табака и ванили. Начальные ноты - мягкий табак, который завлекает противоположный пол и интригует, а затем, после приятной беседы в ресторане, раскрывается пленительный запах ванили.",
+            composition="70% 97% ethanol\n30% aromatic oils",
+            application="Рекомендуем наносить на очищенное и распаренное тело для полного раскрытия парфюмерной композиции 1-2 пшика",
+            sex="unisex",
             volume=50,
             flavor_group="Набор ароматов",
-            top_notes="Верхние ноты",
-            middle_notes="Средние ноты",
-            basic_notes="Базовые ноты",
+            top_notes="табак, специи",
+            middle_notes="ваниль, цветок табака, какао, бобы тонка",
+            basic_notes="дерево, фрукты",
             category_id=1,
         )
     )

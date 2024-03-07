@@ -1,0 +1,15 @@
+name
+
+Описание: description
+
+Состав: composition
+
+Применение: application
+
+Верхние ноты: top_notes
+Средние ноты: middle_notes
+Базовые ноты: basic_notes
+Для кого: sex
+Объем: volume мл
+
+Стоимость: price руб
