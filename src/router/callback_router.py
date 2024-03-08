@@ -5,6 +5,7 @@ from aiogram.types import CallbackQuery, Message
 from src.service.manager.BotManagerFacade import BotManagerFacade
 from src.repositories.CategoryRepository import CategoryRepositoryAlchemy
 from src.models.product import ProductModelORM
+from src.service.bot.QueryWorker import QueryWorker
 from src.repositories.ProductRepository import (
     ProductRepositoryAlchemy,
     file_set_product,
@@ -99,10 +100,8 @@ async def answer_category(message_user: CallbackQuery) -> Message | None:
         https://core.telegram.org/bots/api#message
         https://core.telegram.org/bots/api#callbackquery
     """
-    if message_user.data == "Parfume":
-        result = await ProductRepositoryAlchemy.find_elements(1)
-    elif message_user.data == "Samples":
-        result = await ProductRepositoryAlchemy.find_elements(2)
+    number = QueryWorker(message_user).find_element()
+    result = await ProductRepositoryAlchemy.find_elements(number)
     if result is not None:
         message = await BotManagerFacade(
             message=message_user,
@@ -129,15 +128,15 @@ async def answer_product(message_user: CallbackQuery) -> Message | None:
         https://core.telegram.org/bots/api#message
         https://core.telegram.org/bots/api#callbackquery
     """
+    number = QueryWorker(message_user).find_element()
     query = message_user.data
     if isinstance(query, str):
         data = query.split("_")
-        if data[1] == "Parfume":
-            result = await ProductRepositoryAlchemy.find_elements(1, True)
-            if isinstance(result, ProductModelORM):
-                await BotManagerFacade(
-                    message_user, data_sql=result, data_callback=data[1]
-                ).delete_and_send_message_product()
+        result = await ProductRepositoryAlchemy.find_elements(number, True)
+        if isinstance(result, ProductModelORM):
+            await BotManagerFacade(
+                message_user, data_sql=result, data_callback=data[1]
+            ).delete_and_send_message_product()
 
     return None
 
@@ -162,3 +161,8 @@ async def open_start(message_user: CallbackQuery) -> Message | None:
     )
     message = await manager.delete_and_send_message("Главное меню")
     return message
+
+
+@callback_router.callback_query()
+async def print_data(message_user: CallbackQuery) -> None:
+    print(message_user.data)

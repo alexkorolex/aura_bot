@@ -96,13 +96,13 @@ async def insert_product_data() -> None:
     await ProductRepositoryAlchemy().add(
         ProductModelORM(
             id=None,
-            name="White Mama",
+            name="Black Mama",
             price=6990,
             description="Описание BM",
             composition="Состав BM",
             application="Применение",
             sex="man",
-            volume=50,
+            volume=100,
             flavor_group="Набор ароматов",
             top_notes="Верхние ноты",
             middle_notes="Средние ноты",

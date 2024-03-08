@@ -61,8 +61,8 @@ async def insert_category_data() -> None:
     """Insert fake data"""
     categories = [
         "Parfume",
-        "Samples",
         "Diffuser",
+        "Samples",
     ]
     for category in categories:
         await CategoryRepositoryAlchemy().add(CategoryModelORM(id=None, name=category))
